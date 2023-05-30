@@ -1,0 +1,23 @@
+---
+# https://ansible-collections.github.io/amazon.aws/branch/stable-6/collections/amazon/aws/ec2_security_group_module.html
+- name: Create Home Access Security Group
+   ec2_security_group:
+    name: "Home Access"
+    description: Allow access from home IP
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: tcp
+        ports:
+        - 0-65535
+        cidr_ip: "{{ home_ip }}/32"
+      - proto: udp
+        ports:
+        - 0-65535
+        cidr_ip: "{{ home_ip }}/32"
+      - proto: icmp
+        icmp_type: -1
+        cide_ip: "{{ home_ip }}/32"
+   register: security_group

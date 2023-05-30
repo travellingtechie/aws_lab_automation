@@ -1,0 +1,11 @@
+---
+# https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_net_module.html
+- name: Create VPC
+  ec2_vpc_net:
+    name: "{{ vpc_name }}"
+    cidr_block: "{{ vpc_cidr }}"
+    region: "{{ region }}"
+    state: present
+    aws_access_key: "{{ vault_aws_access_key }}"
+    aws_secret_key: "{{ vault_aws_secret_key }}"
+    register: vpc

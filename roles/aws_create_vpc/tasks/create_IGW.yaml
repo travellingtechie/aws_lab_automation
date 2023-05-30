@@ -1,0 +1,27 @@
+---
+
+- name: create IGW
+  ec2_vpc_igw:
+   vpc_id: "{{ vpc_id }}"
+   region: "{{ region }}"
+   aws_access_key: "{{ vault_aws_access_key }}"
+   aws_secret_key: "{{ vault_aws_secret_key }}"
+   state: "present"
+   tags:
+     Name: "{{ igw_name }}"
+  register: igw
+
+
+- name: Route IGW
+   ec2_vpc_route_table:
+    vpc_id: "{{ vpc_id }}"
+    region: "{{ region }}"
+    aws_access_key: "{{ vault_aws_access_key }}"
+    aws_secret_key: "{{ vault_aws_secret_key }}"
+    subnets:
+      - "{{ subnet.subnet.id }}"
+    routes:
+      - dest: 0.0.0.0/0
+        gateway_id: "{{ igw.gateway_id  }}"
+    tags:
+      Name: "{{ route_name }}"
